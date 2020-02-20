@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { useHistory } from "react-router-dom";
 import { useForm } from '../utils/useForm';
 
 const UpdateForm = props => {
+
+    let history = useHistory();
 
     const [movie, setMovie] = useState();
     
@@ -57,18 +60,18 @@ const UpdateForm = props => {
 
         console.log('Update Form: Movie state: ', movie);
     // Deleting::
-    // const handleRemove = e => {
-    //     e.preventDefault();
-    //     console.log('Look! Im handling the [DELETE] for Friend:::- ', props.friend.id);
+    const handleRemove = e => {
+        e.preventDefault();
+        console.log('Look! Im handling the [DELETE] for Friend:::- ', movie.id);
 
-    //     axiosWithAuth()     
-    //         .delete(`/friends/${props.friend.id}`)
-    //         .then(res => {
-    //             console.log('DELETED RESPONSE: ', res);
-    //             setFriendList(res.data);
-    //         })
-    //         .catch(err => console.log('AxiosWithAuth Error:', err));
-    // }
+        axios     
+            .delete(`http://localhost:5000/api/movies/${movie.id}`)
+            .then(res => {
+                console.log('DELETED RESPONSE: ', res);
+                history.push('/');
+            })
+            .catch(err => console.log('Axios Error:', err));
+    }
 
     return (
         <div className='update-form'>
@@ -83,8 +86,8 @@ const UpdateForm = props => {
                         <input required type='number' name='metascore' placeholder={movie.metascore} onChange={handleChanges} value={values.metascore} />
                         {/* <input required type='text' name='stars' placeholder={movie.stars} onChange={handleChanges} value={values.stars} /> */}
                         <button type='submit'>Save Changes</button>
-
                     </form>
+                    <button onClick={handleRemove}>Delete Listing</button>
                 </div>
             )}
         </div>
